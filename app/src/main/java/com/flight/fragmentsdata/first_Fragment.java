@@ -8,11 +8,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 
 
 /**
@@ -33,8 +39,16 @@ public class first_Fragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    EditText username, password;
-    Button submitbtn;
+    private EditText studentid, username, password, email, department, session;
+    private RadioButton gender;
+    private Button submitbtn;
+    private RadioGroup radioGroup;
+
+    private Spinner spinner, spinner2;
+    private static final String[] paths = {"Computer Science", "Global challenges", "IBT"};
+    private static final String[] sess = {"Software Dev", "Machine Learning", "Computer Networks"};
+
+
     private OnFragmentInteractionListener mListener;
 
     public first_Fragment() {
@@ -72,11 +86,43 @@ public class first_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_first_, container, false);
+        final View view = inflater.inflate(R.layout.fragment_first_, container, false);
+
+        spinner = (Spinner)view.findViewById(R.id.departmentspinner);
+        ArrayAdapter<String>adapter = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_item,paths);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner2 = (Spinner)view.findViewById(R.id.sessionspinner);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_item,sess);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapter2);
+
 
         username = (EditText) view.findViewById(R.id.username);
         password = (EditText) view.findViewById(R.id.password);
+        studentid = (EditText) view.findViewById(R.id.idcard);
+        email = (EditText) view.findViewById(R.id.email);
+        radioGroup = (RadioGroup) view.findViewById(R.id.genderradiogroup);
         submitbtn = (Button) view.findViewById(R.id.button);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                switch (checkedId){
+                    case R.id.radioMale:
+                        gender = view.findViewById(R.id.radioMale);
+
+                    case R.id.radioFemale:
+                        gender = view.findViewById(R.id.radioFemale);
+                }
+            }
+        });
 
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,10 +130,20 @@ public class first_Fragment extends Fragment {
 
                 String usernm = username.getText().toString();
                 String passwrd = password.getText().toString();
+                String studentcardid = studentid.getText().toString();
+                String emailtxt = email.getText().toString();
+                String stgender = gender.getText().toString();
+                String stdepartment = spinner.getSelectedItem().toString();
+                String stsession = spinner2.getSelectedItem().toString();
 
                 Bundle bundle = new Bundle();
                 bundle.putString("UserName", usernm);
                 bundle.putString("Password", passwrd);
+                bundle.putString("StudentId", studentcardid);
+                bundle.putString("Studentemail", emailtxt);
+                bundle.putString("StudentGender", stgender);
+                bundle.putString("StudentDepart", stdepartment);
+                bundle.putString("StudentSession", stsession);
 
                 FragmentManager fragmentManager =  getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -95,8 +151,18 @@ public class first_Fragment extends Fragment {
                 second_fragment second_fragment = new second_fragment();
                 second_fragment.setArguments(bundle);
 
-                fragmentTransaction.replace(R.id.frame_container, second_fragment);
-                fragmentTransaction.commit();
+
+                if (TextUtils.isEmpty(usernm) || TextUtils.isEmpty(passwrd) || TextUtils.isEmpty(studentcardid) || TextUtils.isEmpty(emailtxt)){
+                    username.setError(" Field cannot be empty");
+                    password.setError(" Field cannot be empty");
+                    studentid.setError(" Field cannot be empty");
+                    email.setError(" Field cannot be empty");
+                } else {
+
+                    fragmentTransaction.replace(R.id.frame_container, second_fragment);
+                    fragmentTransaction.commit();
+                }
+
             }
         });
 

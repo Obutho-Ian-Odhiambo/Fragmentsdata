@@ -1,6 +1,7 @@
 package com.flight.fragmentsdata;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,7 +10,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -73,12 +77,27 @@ public class second_fragment extends Fragment {
 
         String UserName = bundle.getString("UserName");
         String Password = bundle.getString("Password");
+        String StudentId = bundle.getString("StudentId");
+        String StudentEmail = bundle.getString("Studentemail");
+        String StudentGender = bundle.getString("StudentGender");
+        String StudentDepartment = bundle.getString("StudentDepart");
+        String StudentSession = bundle.getString("StudentSession");
 
         TextView usernametxt = (TextView) view.findViewById(R.id.usernametxt);
         TextView passwordtxt = (TextView) view.findViewById(R.id.passwordtxt);
+        TextView studentixtxt = (TextView) view.findViewById(R.id.studentidtxt);
+        TextView studentemail = (TextView) view.findViewById(R.id.emailtxt);
+        TextView studentgender = (TextView) view.findViewById(R.id.gendertxt);
+        TextView studentdepartment = (TextView) view.findViewById(R.id.departmenttxt);
+        TextView studentsession = (TextView) view.findViewById(R.id.sessiontxt);
 
         usernametxt.setText(UserName);
         passwordtxt.setText(Password);
+        studentixtxt.setText(StudentId);
+        studentemail.setText(StudentEmail);
+        studentgender.setText(StudentGender);
+        studentdepartment.setText(StudentDepartment);
+        studentsession.setText(StudentSession);
         return view;
     }
 
